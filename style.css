@@ -6,10 +6,12 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
 html{
     scroll-behavior:smooth;
+    -webkit-text-size-adjust:100%;
 }
 
 body{
@@ -17,10 +19,18 @@ body{
     background:#FFFFFF;
     color:#1B1B1B;
     line-height:1.6;
+    overflow-x:hidden;
+    width:100%;
+}
+
+body.no-scroll{
+    overflow:hidden;
 }
 
 img{
+    max-width:100%;
     width:100%;
+    height:auto;
     display:block;
 }
 
@@ -31,6 +41,10 @@ a{
 
 ul{
     list-style:none;
+}
+
+button{
+    font-family:inherit;
 }
 
 /* ===========================================
@@ -66,22 +80,28 @@ ul{
 header{
     position:fixed;
     top:0;
+    left:0;
     width:100%;
     background:#ffffffdd;
     backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
     z-index:1000;
     border-bottom:1px solid #ececec;
+    padding-top:env(safe-area-inset-top);
 }
 
 .navbar{
-    height:75px;
+    min-height:75px;
     display:flex;
     align-items:center;
     justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    position:relative;
 }
 
 .logo{
-    font-size:28px;
+    font-size:clamp(22px,4vw,28px);
     font-weight:800;
     color:#5D9C3D;
 }
@@ -100,59 +120,41 @@ nav a:hover{
     color:#5D9C3D;
 }
 
-/* ===========================================
-   HERO
-=========================================== */
+/* Botão hamburger (oculto em telas grandes) */
 
-.hero{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    padding-top:80px;
-}
-
-.hero-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:70px;
-    align-items:center;
-}
-
-.hero-left h1{
-    font-size:58px;
-    line-height:1.1;
-    font-weight:800;
-    margin-bottom:25px;
-}
-
-.hero-left p{
-    color:#666;
-    font-size:20px;
-    margin-bottom:35px;
-}
-
-.checks{
-    display:flex;
+.menu-toggle{
+    display:none;
     flex-direction:column;
-    gap:18px;
-    font-size:18px;
-    margin-bottom:40px;
-}
-
-.hero-right{
-    display:flex;
     justify-content:center;
     align-items:center;
+    gap:5px;
+    width:44px;
+    height:44px;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    z-index:1100;
 }
 
-.hero-right img{
-    max-width:520px;
-    filter:drop-shadow(0 20px 45px rgba(0,0,0,.15));
-    transition:.4s;
+.menu-toggle span{
+    display:block;
+    width:24px;
+    height:2px;
+    background:#1B1B1B;
+    border-radius:2px;
+    transition:.3s ease;
 }
 
-.hero-right img:hover{
-    transform:translateY(-10px);
+.menu-toggle.active span:nth-child(1){
+    transform:translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2){
+    opacity:0;
+}
+
+.menu-toggle.active span:nth-child(3){
+    transform:translateY(-7px) rotate(-45deg);
 }
 
 /* ===========================================
@@ -170,6 +172,9 @@ nav a:hover{
     font-weight:700;
     transition:.3s;
     box-shadow:0 15px 30px rgba(93,156,61,.25);
+    min-height:44px;
+    text-align:center;
+    cursor:pointer;
 }
 
 .btn:hover{
@@ -185,15 +190,108 @@ nav a:hover{
     margin-top:30px;
 }
 
+/* Botão flutuante mobile */
+
+.mobile-cta{
+    display:none;
+    position:fixed;
+    left:16px;
+    right:16px;
+    bottom:16px;
+    bottom:calc(16px + env(safe-area-inset-bottom));
+    background:#5D9C3D;
+    color:#fff;
+    text-align:center;
+    font-weight:700;
+    font-size:15px;
+    padding:16px 18px;
+    border-radius:16px;
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+    z-index:900;
+    opacity:0;
+    transform:translateY(20px);
+    pointer-events:none;
+    transition:.3s ease;
+}
+
+.mobile-cta.show-cta{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+}
+
 /* ===========================================
    TÍTULOS
 =========================================== */
 
 .section h2{
     text-align:center;
-    font-size:44px;
+    font-size:clamp(28px,4.5vw,44px);
     font-weight:800;
-    margin-bottom:70px;
+    margin-bottom:clamp(40px,6vw,70px);
+    line-height:1.25;
+}
+
+/* ===========================================
+   HERO
+=========================================== */
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding-top:110px;
+    padding-bottom:40px;
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:70px;
+    align-items:center;
+}
+
+.hero-left h1{
+    font-size:clamp(30px,4.6vw,58px);
+    line-height:1.15;
+    font-weight:800;
+    margin-bottom:25px;
+}
+
+.hero-left h1 .highlight{
+    color:#5D9C3D;
+}
+
+.hero-left p{
+    color:#666;
+    font-size:clamp(16px,2.2vw,20px);
+    margin-bottom:35px;
+}
+
+.checks{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    font-size:clamp(15px,2vw,18px);
+    margin-bottom:40px;
+}
+
+.hero-right{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.hero-right img{
+    max-width:520px;
+    width:100%;
+    height:auto;
+    filter:drop-shadow(0 20px 45px rgba(0,0,0,.15));
+    transition:.4s;
+}
+
+.hero-right img:hover{
+    transform:translateY(-10px);
 }
 
 /* ===========================================
@@ -214,6 +312,7 @@ nav a:hover{
     box-shadow:0 8px 25px rgba(0,0,0,.05);
     transition:.35s;
     cursor:pointer;
+    font-size:34px;
 }
 
 .card:hover{
@@ -223,14 +322,15 @@ nav a:hover{
 
 .card h3{
     margin-top:18px;
-    font-size:20px;
+    font-size:19px;
     font-weight:600;
+    line-height:1.4;
 }
 
 .bottom-text{
     margin-top:55px;
     text-align:center;
-    font-size:22px;
+    font-size:clamp(17px,2.4vw,22px);
     font-weight:600;
 }
 
@@ -257,14 +357,14 @@ nav a:hover{
 
 .flow{
     text-align:center;
-    font-size:32px;
+    font-size:clamp(20px,3vw,32px);
     font-weight:700;
 }
 
 .flow p{
     margin-top:35px;
     color:#666;
-    font-size:19px;
+    font-size:clamp(16px,2vw,19px);
     font-weight:400;
     line-height:1.7;
 }
@@ -275,7 +375,7 @@ nav a:hover{
 
 .benefits{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
     gap:28px;
 }
 
@@ -287,6 +387,7 @@ nav a:hover{
     box-shadow:0 10px 25px rgba(0,0,0,.05);
     transition:.35s;
     border:1px solid #eeeeee;
+    font-size:44px;
 }
 
 .benefit:hover{
@@ -296,39 +397,42 @@ nav a:hover{
 
 .benefit h3{
     margin-top:18px;
-    font-size:20px;
+    font-size:19px;
     font-weight:600;
-}
-
-.benefit{
-    font-size:48px;
 }
 
 /* ===========================================
    COMPARAÇÃO
 =========================================== */
 
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    border-radius:20px;
+    box-shadow:0 15px 35px rgba(0,0,0,.05);
+}
+
 table{
     width:100%;
+    min-width:420px;
     border-collapse:collapse;
     overflow:hidden;
-    border-radius:20px;
     background:#fff;
-    box-shadow:0 15px 35px rgba(0,0,0,.05);
 }
 
 th{
     background:#5D9C3D;
     color:#fff;
-    padding:22px;
-    font-size:20px;
+    padding:18px 20px;
+    font-size:clamp(16px,2vw,20px);
 }
 
 td{
-    padding:22px;
+    padding:18px 20px;
     text-align:center;
     border-bottom:1px solid #f0f0f0;
-    font-size:18px;
+    font-size:clamp(15px,2vw,18px);
 }
 
 tr:hover{
@@ -340,7 +444,7 @@ tr:hover{
 =========================================== */
 
 .money{
-    font-size:42px;
+    font-size:clamp(24px,4vw,42px);
     font-weight:800;
     color:#5D9C3D;
     line-height:1.8;
@@ -348,7 +452,7 @@ tr:hover{
 }
 
 .green-light p{
-    font-size:22px;
+    font-size:clamp(17px,2.4vw,22px);
     color:#555;
     margin-bottom:40px;
 }
@@ -358,24 +462,39 @@ tr:hover{
 =========================================== */
 
 .offer{
+    position:relative;
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:70px;
     align-items:center;
+    padding-top:20px;
 }
 
-.offer img{
+.offer-badge{
+    grid-column:1 / -1;
+    justify-self:center;
+    background:#5D9C3D;
+    color:#fff;
+    padding:10px 22px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:700;
+    box-shadow:0 8px 20px rgba(93,156,61,.3);
+    margin-bottom:10px;
+}
+
+.offer-media img{
     max-width:500px;
     margin:auto;
     filter:drop-shadow(0 20px 45px rgba(0,0,0,.15));
     transition:.4s;
 }
 
-.offer img:hover{
+.offer-media img:hover{
     transform:translateY(-10px) scale(1.02);
 }
 
-.offer h2{
+.offer-content h2{
     text-align:left;
     margin-bottom:25px;
 }
@@ -383,13 +502,13 @@ tr:hover{
 .old-price{
     display:block;
     color:#888;
-    font-size:26px;
+    font-size:clamp(20px,3vw,26px);
     text-decoration:line-through;
 }
 
 .price{
     color:#5D9C3D;
-    font-size:68px;
+    font-size:clamp(40px,7vw,68px);
     font-weight:800;
     margin:10px 0 30px;
 }
@@ -402,36 +521,9 @@ tr:hover{
 }
 
 .offer li{
-    font-size:20px;
+    font-size:clamp(16px,2.2vw,20px);
     color:#444;
 }
-
-/* ===========================================
-   BADGE DA OFERTA
-=========================================== */
-
-.offer::before{
-    content:"🔥 Oferta por tempo limitado";
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    margin-top:-60px;
-    background:#5D9C3D;
-    color:#fff;
-    padding:10px 22px;
-    border-radius:999px;
-    font-size:14px;
-    font-weight:700;
-    box-shadow:0 8px 20px rgba(93,156,61,.3);
-}
-
-.offer{
-    position:relative;
-}
-
-/* ===========================================
-   LISTA DA OFERTA
-=========================================== */
 
 .offer li::before{
     content:"✓";
@@ -440,14 +532,10 @@ tr:hover{
     margin-right:10px;
 }
 
-/* ===========================================
-   BOTÃO DA OFERTA
-=========================================== */
-
 .offer .btn{
     width:100%;
-    font-size:22px;
-    padding:22px;
+    font-size:20px;
+    padding:20px;
     border-radius:18px;
 }
 
@@ -457,7 +545,7 @@ tr:hover{
 
 .card,
 .benefit,
-.offer img,
+.offer-media img,
 .btn,
 table{
     transition:all .3s ease;
@@ -515,13 +603,16 @@ table{
     border:none;
     background:none;
     cursor:pointer;
-    padding:25px 30px;
+    padding:22px 24px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    font-size:19px;
+    gap:16px;
+    font-size:clamp(16px,2vw,19px);
     font-weight:600;
     color:#1B1B1B;
+    text-align:left;
+    min-height:44px;
 }
 
 .faq-item button::after{
@@ -529,6 +620,7 @@ table{
     font-size:28px;
     color:#5D9C3D;
     transition:.3s;
+    flex-shrink:0;
 }
 
 .faq-item.active button::after{
@@ -539,14 +631,15 @@ table{
     max-height:0;
     overflow:hidden;
     transition:max-height .35s ease;
-    padding:0 30px;
+    padding:0 24px;
     color:#666;
     line-height:1.8;
+    font-size:15px;
 }
 
 .faq-item.active div{
-    max-height:200px;
-    padding:0 30px 25px;
+    max-height:300px;
+    padding:0 24px 25px;
 }
 
 /* ===========================================
@@ -555,20 +648,21 @@ table{
 
 footer{
     background:#F5F5F5;
-    padding:70px 0 30px;
+    padding:70px 0 110px;
     margin-top:40px;
 }
 
 .footer{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:30px;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:24px;
     margin-bottom:40px;
+    text-align:center;
 }
 
 .footer h3{
     color:#5D9C3D;
-    font-size:28px;
+    font-size:clamp(22px,3vw,28px);
     margin-bottom:15px;
 }
 
@@ -587,7 +681,8 @@ footer{
 footer p{
     text-align:center;
     color:#888;
-    font-size:15px;
+    font-size:14px;
+    padding:0 16px;
 }
 
 /* ===========================================
@@ -657,186 +752,211 @@ table,
 .benefit:nth-child(7){animation-delay:.7s;}
 .benefit:nth-child(8){animation-delay:.8s;}
 
+@media (prefers-reduced-motion: reduce){
+
+    html{
+        scroll-behavior:auto;
+    }
+
+    *{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+        scroll-behavior:auto !important;
+    }
+
+}
+
 /* ===========================================
-   RESPONSIVO
+   RESPONSIVO — TABLET GRANDE / LAPTOP PEQUENO
 =========================================== */
 
 @media(max-width:1100px){
 
-.hero-grid,
-.dashboard,
-.offer{
+    .hero-grid,
+    .dashboard{
+        grid-template-columns:1fr;
+    }
 
-grid-template-columns:1fr;
+    .hero-right{
+        order:-1;
+    }
 
+    .offer{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+
+    .offer-content h2{
+        text-align:center;
+    }
+
+    .offer-media img{
+        max-width:380px;
+    }
+
+    .offer ul{
+        align-items:center;
+    }
 }
 
-.hero-right{
-
-order:-1;
-
-}
-
-.offer h2{
-
-text-align:center;
-
-}
-
-.offer{
-
-text-align:center;
-
-}
-
-.offer img{
-
-max-width:420px;
-
-}
-
-}
+/* ===========================================
+   RESPONSIVO — TABLET / MOBILE GRANDE
+=========================================== */
 
 @media(max-width:768px){
 
-.navbar{
+    .section{
+        padding:64px 0;
+    }
 
-flex-direction:column;
-height:auto;
-padding:20px 0;
+    .section::after{
+        margin:50px auto 0;
+    }
 
+    .hero{
+        padding-top:100px;
+        min-height:auto;
+    }
+
+    /* Menu hamburger */
+
+    .menu-toggle{
+        display:flex;
+    }
+
+    nav{
+        position:fixed;
+        top:0;
+        right:0;
+        height:100vh;
+        width:min(78vw,320px);
+        background:#ffffff;
+        flex-direction:column;
+        justify-content:flex-start;
+        align-items:flex-start;
+        gap:0;
+        padding:110px 32px 32px;
+        box-shadow:-10px 0 40px rgba(0,0,0,.12);
+        transform:translateX(100%);
+        transition:transform .35s ease;
+        z-index:1050;
+    }
+
+    nav.open{
+        transform:translateX(0);
+    }
+
+    nav a{
+        width:100%;
+        padding:16px 0;
+        font-size:18px;
+        border-bottom:1px solid #f0f0f0;
+    }
+
+    .dashboard{
+        gap:35px;
+    }
+
+    .flow div{
+        padding:2px 0;
+    }
+
+    .money{
+        font-size:clamp(22px,6vw,30px);
+    }
+
+    .btn{
+        width:100%;
+    }
+
+    .mobile-cta{
+        display:block;
+    }
+
+    footer{
+        padding:50px 0 120px;
+    }
 }
 
-nav{
-
-margin-top:15px;
-gap:20px;
-flex-wrap:wrap;
-justify-content:center;
-
-}
-
-.hero{
-
-padding-top:150px;
-
-}
-
-.hero-left h1{
-
-font-size:40px;
-
-}
-
-.hero-left p{
-
-font-size:18px;
-
-}
-
-.section{
-
-padding:70px 0;
-
-}
-
-.section h2{
-
-font-size:34px;
-margin-bottom:45px;
-
-}
-
-.money{
-
-font-size:30px;
-
-}
-
-.price{
-
-font-size:54px;
-
-}
-
-.btn{
-
-width:100%;
-
-}
-
-.dashboard{
-
-gap:35px;
-
-}
-
-.flow{
-
-font-size:24px;
-
-}
-
-table{
-
-display:block;
-overflow-x:auto;
-
-}
-
-}
+/* ===========================================
+   RESPONSIVO — MOBILE
+=========================================== */
 
 @media(max-width:480px){
 
-.container{
+    .container{
+        width:92%;
+    }
 
-width:92%;
+    .hero-left h1{
+        font-size:clamp(26px,7.5vw,34px);
+    }
 
+    .logo{
+        font-size:22px;
+    }
+
+    .card,
+    .benefit{
+        padding:26px 18px;
+    }
+
+    .price{
+        font-size:clamp(36px,11vw,46px);
+    }
+
+    .btn{
+        padding:16px;
+        font-size:16px;
+    }
+
+    .offer-media img{
+        max-width:280px;
+    }
+
+    .faq-item button{
+        padding:18px 20px;
+        font-size:16px;
+    }
+
+    footer{
+        padding:40px 0 120px;
+    }
 }
 
-.hero-left h1{
+/* ===========================================
+   TELAS MUITO PEQUENAS (Android compactos)
+=========================================== */
 
-font-size:34px;
+@media(max-width:360px){
 
+    .hero-left h1{
+        font-size:24px;
+    }
+
+    .section h2{
+        font-size:24px;
+    }
+
+    .btn{
+        font-size:14px;
+        padding:14px;
+    }
+
+    .mobile-cta{
+        font-size:13px;
+        padding:14px;
+    }
 }
 
-.logo{
+/* ===========================================
+   TELAS GRANDES (desktop wide)
+=========================================== */
 
-font-size:24px;
+@media(min-width:1400px){
 
-}
-
-.card,
-.benefit{
-
-padding:28px 20px;
-
-}
-
-.price{
-
-font-size:46px;
-
-}
-
-.btn{
-
-padding:18px;
-
-font-size:17px;
-
-}
-
-.offer img{
-
-max-width:300px;
-
-}
-
-footer{
-
-padding:50px 0 25px;
-
-}
-
+    .container{
+        max-width:1320px;
+    }
 }

@@ -8,6 +8,57 @@ if (typeof lucide !== "undefined") {
 }
 
 // =========================================
+// Menu mobile (hamburger)
+// =========================================
+
+const menuToggle = document.getElementById("menuToggle");
+const mainNav = document.getElementById("mainNav");
+
+if (menuToggle && mainNav) {
+
+    menuToggle.addEventListener("click", () => {
+
+        const isOpen = mainNav.classList.toggle("open");
+
+        menuToggle.classList.toggle("active", isOpen);
+
+        menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+
+        document.body.classList.toggle("no-scroll", isOpen);
+
+    });
+
+    // Fecha o menu ao clicar em um link (mobile)
+    mainNav.querySelectorAll("a").forEach(link => {
+
+        link.addEventListener("click", () => {
+
+            mainNav.classList.remove("open");
+            menuToggle.classList.remove("active");
+            menuToggle.setAttribute("aria-expanded", "false");
+            document.body.classList.remove("no-scroll");
+
+        });
+
+    });
+
+    // Fecha o menu se a tela for redimensionada para desktop
+    window.addEventListener("resize", () => {
+
+        if (window.innerWidth > 768 && mainNav.classList.contains("open")) {
+
+            mainNav.classList.remove("open");
+            menuToggle.classList.remove("active");
+            menuToggle.setAttribute("aria-expanded", "false");
+            document.body.classList.remove("no-scroll");
+
+        }
+
+    });
+
+}
+
+// =========================================
 // FAQ Accordion
 // =========================================
 
@@ -83,19 +134,26 @@ document.querySelectorAll(".card,.benefit,.offer,.faq-item,.money,.screens img")
 });
 
 // =========================================
-// Scroll suave
+// Scroll suave (com offset do header fixo)
 // =========================================
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
 
     anchor.addEventListener("click",function(e){
 
-        e.preventDefault();
-
         const destino=document.querySelector(this.getAttribute("href"));
 
-        destino.scrollIntoView({
+        if(!destino) return;
 
+        e.preventDefault();
+
+        const headerHeight = header ? header.offsetHeight : 0;
+
+        const top = destino.getBoundingClientRect().top + window.pageYOffset - headerHeight - 10;
+
+        window.scrollTo({
+
+            top,
             behavior:"smooth"
 
         });
@@ -105,7 +163,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
 });
 
 // =========================================
-// Hover do botão
+// Hover / touch do botão
 // =========================================
 
 document.querySelectorAll(".btn").forEach(btn=>{
@@ -181,6 +239,34 @@ window.addEventListener("scroll",animateMoney);
 animateMoney();
 
 // =========================================
+// Botão flutuante mobile (mostra após rolar o hero)
+// =========================================
+
+const mobileCta = document.querySelector(".mobile-cta");
+const heroSection = document.querySelector(".hero");
+
+function toggleMobileCta(){
+
+    if(!mobileCta || !heroSection) return;
+
+    const heroBottom = heroSection.getBoundingClientRect().bottom;
+
+    if(heroBottom < 0){
+
+        mobileCta.classList.add("show-cta");
+
+    }else{
+
+        mobileCta.classList.remove("show-cta");
+
+    }
+
+}
+
+window.addEventListener("scroll", toggleMobileCta);
+toggleMobileCta();
+
+// =========================================
 // Classes de animação
 // =========================================
 
@@ -203,6 +289,16 @@ transition:.8s ease;
 opacity:1;
 
 transform:translateY(0);
+
+}
+
+@media (prefers-reduced-motion: reduce){
+
+.hidden{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+}
 
 }
 
