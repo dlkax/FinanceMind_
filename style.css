@@ -1366,3 +1366,15 @@ table,
     }
 
 }
+
+.guarantee{
+    margin:25px 0 5px;
+    padding:16px 18px;
+    background:#F4FAF2;
+    color:#426F2E;
+    border:1px solid rgba(93,156,61,.22);
+    border-radius:16px;
+    text-align:center;
+    font-size:15px;
+    font-weight:600;
+}
