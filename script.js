@@ -71,9 +71,11 @@ faqItems.forEach(item => {
     button.addEventListener("click", () => {
 
         faqItems.forEach(other => {
+
             if (other !== item) {
                 other.classList.remove("active");
             }
+
         });
 
         item.classList.toggle("active");
@@ -90,12 +92,12 @@ const header = document.querySelector("header");
 
 window.addEventListener("scroll", () => {
 
-    if(window.scrollY > 50){
+    if (window.scrollY > 50) {
 
         header.style.boxShadow = "0 8px 25px rgba(0,0,0,.08)";
         header.style.background = "rgba(255,255,255,.97)";
 
-    }else{
+    } else {
 
         header.style.boxShadow = "none";
         header.style.background = "rgba(255,255,255,.85)";
@@ -108,11 +110,11 @@ window.addEventListener("scroll", () => {
 // Fade ao aparecer na tela
 // =========================================
 
-const observer = new IntersectionObserver((entries)=>{
+const observer = new IntersectionObserver((entries) => {
 
-    entries.forEach(entry=>{
+    entries.forEach(entry => {
 
-        if(entry.isIntersecting){
+        if (entry.isIntersecting) {
 
             entry.target.classList.add("show");
 
@@ -120,41 +122,48 @@ const observer = new IntersectionObserver((entries)=>{
 
     });
 
-},{
-    threshold:.15
+}, {
+    threshold: .15
 });
 
-document.querySelectorAll(".card,.benefit,.testimonial,.offer,.faq-item,.money,.screens img")
-.forEach(el=>{
+document
+    .querySelectorAll(
+        ".card,.benefit,.testimonial,.offer,.faq-item,.money,.screens img"
+    )
+    .forEach(el => {
 
-    el.classList.add("hidden");
+        el.classList.add("hidden");
 
-    observer.observe(el);
+        observer.observe(el);
 
-});
+    });
 
 // =========================================
 // Scroll suave (com offset do header fixo)
 // =========================================
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
-    anchor.addEventListener("click",function(e){
+    anchor.addEventListener("click", function (e) {
 
-        const destino=document.querySelector(this.getAttribute("href"));
+        const destino = document.querySelector(this.getAttribute("href"));
 
-        if(!destino) return;
+        if (!destino) return;
 
         e.preventDefault();
 
         const headerHeight = header ? header.offsetHeight : 0;
 
-        const top = destino.getBoundingClientRect().top + window.pageYOffset - headerHeight - 10;
+        const top =
+            destino.getBoundingClientRect().top +
+            window.pageYOffset -
+            headerHeight -
+            10;
 
         window.scrollTo({
 
             top,
-            behavior:"smooth"
+            behavior: "smooth"
 
         });
 
@@ -166,17 +175,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
 // Hover / touch do botão
 // =========================================
 
-document.querySelectorAll(".btn").forEach(btn=>{
+document.querySelectorAll(".btn").forEach(btn => {
 
-    btn.addEventListener("mouseenter",()=>{
+    btn.addEventListener("mouseenter", () => {
 
-        btn.style.transform="translateY(-5px) scale(1.02)";
+        btn.style.transform = "translateY(-5px) scale(1.02)";
 
     });
 
-    btn.addEventListener("mouseleave",()=>{
+    btn.addEventListener("mouseleave", () => {
 
-        btn.style.transform="translateY(0px)";
+        btn.style.transform = "translateY(0px)";
 
     });
 
@@ -190,15 +199,15 @@ const money = document.querySelector(".money");
 
 let animated = false;
 
-function animateMoney(){
+function animateMoney() {
 
-    if(animated) return;
+    if (animated) return;
 
-    if(!money) return;
+    if (!money) return;
 
     const pos = money.getBoundingClientRect().top;
 
-    if(pos < window.innerHeight - 150){
+    if (pos < window.innerHeight - 150) {
 
         animated = true;
 
@@ -216,46 +225,46 @@ function animateMoney(){
 
         let i = 0;
 
-        const interval = setInterval(()=>{
+        const interval = setInterval(() => {
 
             money.innerHTML += valores[i] + "<br>";
 
             i++;
 
-            if(i >= valores.length){
+            if (i >= valores.length) {
 
                 clearInterval(interval);
 
             }
 
-        },350);
+        }, 350);
 
     }
 
 }
 
-window.addEventListener("scroll",animateMoney);
+window.addEventListener("scroll", animateMoney);
 
 animateMoney();
 
 // =========================================
-// Botão flutuante mobile (mostra após rolar o hero)
+// Botão flutuante mobile
 // =========================================
 
 const mobileCta = document.querySelector(".mobile-cta");
 const heroSection = document.querySelector(".hero");
 
-function toggleMobileCta(){
+function toggleMobileCta() {
 
-    if(!mobileCta || !heroSection) return;
+    if (!mobileCta || !heroSection) return;
 
     const heroBottom = heroSection.getBoundingClientRect().bottom;
 
-    if(heroBottom < 0){
+    if (heroBottom < 0) {
 
         mobileCta.classList.add("show-cta");
 
-    }else{
+    } else {
 
         mobileCta.classList.remove("show-cta");
 
@@ -264,6 +273,7 @@ function toggleMobileCta(){
 }
 
 window.addEventListener("scroll", toggleMobileCta);
+
 toggleMobileCta();
 
 // =========================================
@@ -276,29 +286,33 @@ style.innerHTML = `
 
 .hidden{
 
-opacity:0;
+    opacity:0;
 
-transform:translateY(40px);
+    transform:translateY(40px);
 
-transition:.8s ease;
+    transition:.8s ease;
 
 }
 
 .show{
 
-opacity:1;
+    opacity:1;
 
-transform:translateY(0);
+    transform:translateY(0);
 
 }
 
 @media (prefers-reduced-motion: reduce){
 
-.hidden{
-    opacity:1 !important;
-    transform:none !important;
-    transition:none !important;
-}
+    .hidden{
+
+        opacity:1 !important;
+
+        transform:none !important;
+
+        transition:none !important;
+
+    }
 
 }
 
@@ -312,9 +326,12 @@ document.head.appendChild(style);
 
 const footer = document.querySelector("footer p");
 
-if(footer){
+if (footer) {
 
-    footer.innerHTML = "© " + new Date().getFullYear() + " FinanceMind. Todos os direitos reservados.";
+    footer.innerHTML =
+        "© " +
+        new Date().getFullYear() +
+        " FinanceMind. Todos os direitos reservados.";
 
 }
 
@@ -324,11 +341,20 @@ console.log("FinanceMind Landing Page carregada com sucesso 🚀");
 // Carrossel de depoimentos FinanceMind
 // =========================================
 
-const testimonialsCarousel = document.getElementById("testimonialsCarousel");
-const testimonialsTrack = document.getElementById("testimonialsTrack");
-const testimonialPrev = document.getElementById("testimonialPrev");
-const testimonialNext = document.getElementById("testimonialNext");
-const testimonialDots = document.getElementById("testimonialDots");
+const testimonialsCarousel =
+    document.getElementById("testimonialsCarousel");
+
+const testimonialsTrack =
+    document.getElementById("testimonialsTrack");
+
+const testimonialPrev =
+    document.getElementById("testimonialPrev");
+
+const testimonialNext =
+    document.getElementById("testimonialNext");
+
+const testimonialDots =
+    document.getElementById("testimonialDots");
 
 if (
     testimonialsCarousel &&
@@ -357,6 +383,7 @@ if (
 
         dot.className = "testimonial-dot";
         dot.type = "button";
+
         dot.setAttribute(
             "aria-label",
             `Ir para o depoimento ${index + 1}`
@@ -373,31 +400,81 @@ if (
 
     });
 
-    const dots = testimonialDots.querySelectorAll(".testimonial-dot");
+    const dots =
+        testimonialDots.querySelectorAll(".testimonial-dot");
 
+    // Retorna a largura do card mais o espaço entre os cards
     function getCardWidth() {
 
-        const firstCard = testimonialsTrack.querySelector(".testimonial-card");
+        const firstCard =
+            testimonialsTrack.querySelector(".testimonial-card");
 
         if (!firstCard) return 0;
 
-        const trackStyle = window.getComputedStyle(testimonialsTrack);
-        const gap = parseFloat(trackStyle.gap) || 0;
+        const trackStyle =
+            window.getComputedStyle(testimonialsTrack);
+
+        const gap =
+            parseFloat(trackStyle.gap) || 0;
 
         return firstCard.getBoundingClientRect().width + gap;
 
     }
 
+    // Calcula quantos cards aparecem ao mesmo tempo
+    function getVisibleCards() {
+
+        const carouselWidth =
+            testimonialsCarousel.getBoundingClientRect().width;
+
+        const cardWidth =
+            getCardWidth();
+
+        if (!cardWidth) return 1;
+
+        return Math.max(
+            1,
+            Math.floor(carouselWidth / cardWidth)
+        );
+
+    }
+
+    // Última posição válida sem deixar espaço vazio
+    function getLastValidIndex() {
+
+        const visibleCards =
+            getVisibleCards();
+
+        return Math.max(
+            0,
+            originalCards.length - visibleCards
+        );
+
+    }
+
+    // Atualiza os indicadores inferiores
     function updateDots() {
+
+        const lastValidIndex =
+            getLastValidIndex();
 
         dots.forEach((dot, index) => {
 
-            dot.classList.toggle("active", index === currentIndex);
+            dot.style.display =
+                index <= lastValidIndex
+                    ? "block"
+                    : "none";
+
+            dot.classList.toggle(
+                "active",
+                index === currentIndex
+            );
 
         });
 
     }
 
+    // Move o carrossel
     function updateCarousel(animate = true) {
 
         if (!animate) {
@@ -411,8 +488,11 @@ if (
 
         }
 
-        currentTranslate = -(currentIndex * getCardWidth());
-        previousTranslate = currentTranslate;
+        currentTranslate =
+            -(currentIndex * getCardWidth());
+
+        previousTranslate =
+            currentTranslate;
 
         testimonialsTrack.style.transform =
             `translate3d(${currentTranslate}px,0,0)`;
@@ -421,17 +501,24 @@ if (
 
     }
 
+    // Vai para um slide específico
     function goToSlide(index) {
 
         if (isTransitioning) return;
 
         isTransitioning = true;
 
+        const lastValidIndex =
+            getLastValidIndex();
+
+        // Ao passar do último slide válido,
+        // volta para o começo
         if (index < 0) {
 
-            currentIndex = originalCards.length - 1;
+            currentIndex =
+                lastValidIndex;
 
-        } else if (index >= originalCards.length) {
+        } else if (index > lastValidIndex) {
 
             currentIndex = 0;
 
@@ -463,6 +550,7 @@ if (
 
     }
 
+    // Inicia o movimento automático
     function startAutoPlay() {
 
         stopAutoPlay();
@@ -475,11 +563,14 @@ if (
 
     }
 
+    // Para o movimento automático
     function stopAutoPlay() {
 
         if (autoPlayInterval) {
 
             clearInterval(autoPlayInterval);
+
+            autoPlayInterval = null;
 
         }
 
@@ -488,54 +579,83 @@ if (
     function restartAutoPlay() {
 
         stopAutoPlay();
+
         startAutoPlay();
 
     }
 
+    // Botão próximo
     testimonialNext.addEventListener("click", () => {
 
         nextSlide();
+
         restartAutoPlay();
 
     });
 
+    // Botão anterior
     testimonialPrev.addEventListener("click", () => {
 
         previousSlide();
+
         restartAutoPlay();
 
     });
 
-    // Pausa quando o mouse está sobre o carrossel
-    testimonialsCarousel.addEventListener("mouseenter", stopAutoPlay);
-    testimonialsCarousel.addEventListener("mouseleave", startAutoPlay);
+    // Pausa quando o mouse fica em cima
+    testimonialsCarousel.addEventListener(
+        "mouseenter",
+        stopAutoPlay
+    );
 
+    testimonialsCarousel.addEventListener(
+        "mouseleave",
+        startAutoPlay
+    );
+
+    // =========================================
     // Arrastar com mouse ou toque
-    testimonialsCarousel.addEventListener("pointerdown", event => {
+    // =========================================
 
-        isDragging = true;
-        startX = event.clientX;
-        previousTranslate = -(currentIndex * getCardWidth());
+    testimonialsCarousel.addEventListener(
+        "pointerdown",
+        event => {
 
-        testimonialsTrack.style.transition = "none";
+            isDragging = true;
 
-        testimonialsCarousel.setPointerCapture(event.pointerId);
-        stopAutoPlay();
+            startX = event.clientX;
 
-    });
+            previousTranslate =
+                -(currentIndex * getCardWidth());
 
-    testimonialsCarousel.addEventListener("pointermove", event => {
+            testimonialsTrack.style.transition = "none";
 
-        if (!isDragging) return;
+            testimonialsCarousel.setPointerCapture(
+                event.pointerId
+            );
 
-        const movement = event.clientX - startX;
+            stopAutoPlay();
 
-        currentTranslate = previousTranslate + movement;
+        }
+    );
 
-        testimonialsTrack.style.transform =
-            `translate3d(${currentTranslate}px,0,0)`;
+    testimonialsCarousel.addEventListener(
+        "pointermove",
+        event => {
 
-    });
+            if (!isDragging) return;
+
+            const movement =
+                event.clientX - startX;
+
+            currentTranslate =
+                previousTranslate + movement;
+
+            testimonialsTrack.style.transform =
+                `translate3d(${currentTranslate}px,0,0)`;
+
+        }
+    );
 
     function endDrag(event) {
 
@@ -543,7 +663,9 @@ if (
 
         isDragging = false;
 
-        const movement = event.clientX - startX;
+        const movement =
+            event.clientX - startX;
+
         const minimumMovement = 55;
 
         if (movement < -minimumMovement) {
@@ -564,32 +686,62 @@ if (
 
     }
 
-    testimonialsCarousel.addEventListener("pointerup", endDrag);
-    testimonialsCarousel.addEventListener("pointercancel", endDrag);
+    testimonialsCarousel.addEventListener(
+        "pointerup",
+        endDrag
+    );
 
-    // Teclado
-    testimonialsCarousel.setAttribute("tabindex", "0");
+    testimonialsCarousel.addEventListener(
+        "pointercancel",
+        endDrag
+    );
 
-    testimonialsCarousel.addEventListener("keydown", event => {
+    // =========================================
+    // Controle pelo teclado
+    // =========================================
 
-        if (event.key === "ArrowRight") {
+    testimonialsCarousel.setAttribute(
+        "tabindex",
+        "0"
+    );
 
-            nextSlide();
-            restartAutoPlay();
+    testimonialsCarousel.addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key === "ArrowRight") {
+
+                nextSlide();
+
+                restartAutoPlay();
+
+            }
+
+            if (event.key === "ArrowLeft") {
+
+                previousSlide();
+
+                restartAutoPlay();
+
+            }
 
         }
+    );
 
-        if (event.key === "ArrowLeft") {
+    // =========================================
+    // Ajuste ao redimensionar a tela
+    // =========================================
 
-            previousSlide();
-            restartAutoPlay();
-
-        }
-
-    });
-
-    // Atualiza quando a tela muda de tamanho
     window.addEventListener("resize", () => {
+
+        const lastValidIndex =
+            getLastValidIndex();
+
+        if (currentIndex > lastValidIndex) {
+
+            currentIndex = 0;
+
+        }
 
         updateCarousel(false);
 
@@ -602,36 +754,51 @@ if (
 
     });
 
+    // =========================================
     // Animação inicial da seção
+    // =========================================
+
     const testimonialsSection =
         document.querySelector(".testimonials-section");
 
     if (testimonialsSection) {
 
-        testimonialsSection.classList.add("testimonials-hidden");
+        testimonialsSection.classList.add(
+            "testimonials-hidden"
+        );
 
-        const testimonialsObserver = new IntersectionObserver(entries => {
+        const testimonialsObserver =
+            new IntersectionObserver(entries => {
 
-            entries.forEach(entry => {
+                entries.forEach(entry => {
 
-                if (entry.isIntersecting) {
+                    if (entry.isIntersecting) {
 
-                    entry.target.classList.add("testimonials-visible");
-                    testimonialsObserver.unobserve(entry.target);
+                        entry.target.classList.add(
+                            "testimonials-visible"
+                        );
 
-                }
+                        testimonialsObserver.unobserve(
+                            entry.target
+                        );
 
+                    }
+
+                });
+
+            }, {
+                threshold: 0.12
             });
 
-        }, {
-            threshold: 0.12
-        });
-
-        testimonialsObserver.observe(testimonialsSection);
+        testimonialsObserver.observe(
+            testimonialsSection
+        );
 
     }
 
+    // Inicializa o carrossel
     updateCarousel(false);
+
     startAutoPlay();
 
 }
