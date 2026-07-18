@@ -124,7 +124,7 @@ const observer = new IntersectionObserver((entries)=>{
     threshold:.15
 });
 
-document.querySelectorAll(".card,.benefit,.offer,.faq-item,.money,.screens img")
+document.querySelectorAll(".card,.benefit,.testimonial,.offer,.faq-item,.money,.screens img")
 .forEach(el=>{
 
     el.classList.add("hidden");
@@ -319,3 +319,319 @@ if(footer){
 }
 
 console.log("FinanceMind Landing Page carregada com sucesso 🚀");
+
+// =========================================
+// Carrossel de depoimentos FinanceMind
+// =========================================
+
+const testimonialsCarousel = document.getElementById("testimonialsCarousel");
+const testimonialsTrack = document.getElementById("testimonialsTrack");
+const testimonialPrev = document.getElementById("testimonialPrev");
+const testimonialNext = document.getElementById("testimonialNext");
+const testimonialDots = document.getElementById("testimonialDots");
+
+if (
+    testimonialsCarousel &&
+    testimonialsTrack &&
+    testimonialPrev &&
+    testimonialNext &&
+    testimonialDots
+) {
+
+    const originalCards = Array.from(
+        testimonialsTrack.querySelectorAll(".testimonial-card")
+    );
+
+    let currentIndex = 0;
+    let autoPlayInterval;
+    let isTransitioning = false;
+    let isDragging = false;
+    let startX = 0;
+    let currentTranslate = 0;
+    let previousTranslate = 0;
+
+    // Cria os indicadores
+    originalCards.forEach((card, index) => {
+
+        const dot = document.createElement("button");
+
+        dot.className = "testimonial-dot";
+        dot.type = "button";
+        dot.setAttribute(
+            "aria-label",
+            `Ir para o depoimento ${index + 1}`
+        );
+
+        dot.addEventListener("click", () => {
+
+            goToSlide(index);
+            restartAutoPlay();
+
+        });
+
+        testimonialDots.appendChild(dot);
+
+    });
+
+    const dots = testimonialDots.querySelectorAll(".testimonial-dot");
+
+    function getCardWidth() {
+
+        const firstCard = testimonialsTrack.querySelector(".testimonial-card");
+
+        if (!firstCard) return 0;
+
+        const trackStyle = window.getComputedStyle(testimonialsTrack);
+        const gap = parseFloat(trackStyle.gap) || 0;
+
+        return firstCard.getBoundingClientRect().width + gap;
+
+    }
+
+    function updateDots() {
+
+        dots.forEach((dot, index) => {
+
+            dot.classList.toggle("active", index === currentIndex);
+
+        });
+
+    }
+
+    function updateCarousel(animate = true) {
+
+        if (!animate) {
+
+            testimonialsTrack.style.transition = "none";
+
+        } else {
+
+            testimonialsTrack.style.transition =
+                "transform .6s cubic-bezier(.22,.61,.36,1)";
+
+        }
+
+        currentTranslate = -(currentIndex * getCardWidth());
+        previousTranslate = currentTranslate;
+
+        testimonialsTrack.style.transform =
+            `translate3d(${currentTranslate}px,0,0)`;
+
+        updateDots();
+
+    }
+
+    function goToSlide(index) {
+
+        if (isTransitioning) return;
+
+        isTransitioning = true;
+
+        if (index < 0) {
+
+            currentIndex = originalCards.length - 1;
+
+        } else if (index >= originalCards.length) {
+
+            currentIndex = 0;
+
+        } else {
+
+            currentIndex = index;
+
+        }
+
+        updateCarousel(true);
+
+        setTimeout(() => {
+
+            isTransitioning = false;
+
+        }, 620);
+
+    }
+
+    function nextSlide() {
+
+        goToSlide(currentIndex + 1);
+
+    }
+
+    function previousSlide() {
+
+        goToSlide(currentIndex - 1);
+
+    }
+
+    function startAutoPlay() {
+
+        stopAutoPlay();
+
+        autoPlayInterval = setInterval(() => {
+
+            nextSlide();
+
+        }, 4000);
+
+    }
+
+    function stopAutoPlay() {
+
+        if (autoPlayInterval) {
+
+            clearInterval(autoPlayInterval);
+
+        }
+
+    }
+
+    function restartAutoPlay() {
+
+        stopAutoPlay();
+        startAutoPlay();
+
+    }
+
+    testimonialNext.addEventListener("click", () => {
+
+        nextSlide();
+        restartAutoPlay();
+
+    });
+
+    testimonialPrev.addEventListener("click", () => {
+
+        previousSlide();
+        restartAutoPlay();
+
+    });
+
+    // Pausa quando o mouse está sobre o carrossel
+    testimonialsCarousel.addEventListener("mouseenter", stopAutoPlay);
+    testimonialsCarousel.addEventListener("mouseleave", startAutoPlay);
+
+    // Arrastar com mouse ou toque
+    testimonialsCarousel.addEventListener("pointerdown", event => {
+
+        isDragging = true;
+        startX = event.clientX;
+        previousTranslate = -(currentIndex * getCardWidth());
+
+        testimonialsTrack.style.transition = "none";
+
+        testimonialsCarousel.setPointerCapture(event.pointerId);
+        stopAutoPlay();
+
+    });
+
+    testimonialsCarousel.addEventListener("pointermove", event => {
+
+        if (!isDragging) return;
+
+        const movement = event.clientX - startX;
+
+        currentTranslate = previousTranslate + movement;
+
+        testimonialsTrack.style.transform =
+            `translate3d(${currentTranslate}px,0,0)`;
+
+    });
+
+    function endDrag(event) {
+
+        if (!isDragging) return;
+
+        isDragging = false;
+
+        const movement = event.clientX - startX;
+        const minimumMovement = 55;
+
+        if (movement < -minimumMovement) {
+
+            nextSlide();
+
+        } else if (movement > minimumMovement) {
+
+            previousSlide();
+
+        } else {
+
+            updateCarousel(true);
+
+        }
+
+        startAutoPlay();
+
+    }
+
+    testimonialsCarousel.addEventListener("pointerup", endDrag);
+    testimonialsCarousel.addEventListener("pointercancel", endDrag);
+
+    // Teclado
+    testimonialsCarousel.setAttribute("tabindex", "0");
+
+    testimonialsCarousel.addEventListener("keydown", event => {
+
+        if (event.key === "ArrowRight") {
+
+            nextSlide();
+            restartAutoPlay();
+
+        }
+
+        if (event.key === "ArrowLeft") {
+
+            previousSlide();
+            restartAutoPlay();
+
+        }
+
+    });
+
+    // Atualiza quando a tela muda de tamanho
+    window.addEventListener("resize", () => {
+
+        updateCarousel(false);
+
+        requestAnimationFrame(() => {
+
+            testimonialsTrack.style.transition =
+                "transform .6s cubic-bezier(.22,.61,.36,1)";
+
+        });
+
+    });
+
+    // Animação inicial da seção
+    const testimonialsSection =
+        document.querySelector(".testimonials-section");
+
+    if (testimonialsSection) {
+
+        testimonialsSection.classList.add("testimonials-hidden");
+
+        const testimonialsObserver = new IntersectionObserver(entries => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("testimonials-visible");
+                    testimonialsObserver.unobserve(entry.target);
+
+                }
+
+            });
+
+        }, {
+            threshold: 0.12
+        });
+
+        testimonialsObserver.observe(testimonialsSection);
+
+    }
+
+    updateCarousel(false);
+    startAutoPlay();
+
+}
