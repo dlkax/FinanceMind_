@@ -900,3 +900,5 @@ if (
     loadTheme();
 
 })();
+
+lucide.createIcons();
