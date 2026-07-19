@@ -802,3 +802,54 @@ if (
     startAutoPlay();
 
 }
+
+// =========================================
+// MODO CLARO / ESCURO - FINANCEMIND
+// =========================================
+
+const themeToggle = document.getElementById("themeToggle");
+
+if (themeToggle) {
+
+    const html = document.documentElement;
+
+    function updateTheme() {
+
+        const dark = html.classList.contains("dark-mode");
+
+        // Salva a preferência
+        localStorage.setItem(
+            "financemind-theme",
+            dark ? "dark" : "light"
+        );
+
+        // Atualiza o ícone
+        themeToggle.innerHTML = dark
+            ? '<i data-lucide="sun"></i>'
+            : '<i data-lucide="moon"></i>';
+
+        // Atualiza os ícones Lucide
+        if (typeof lucide !== "undefined") {
+            lucide.createIcons();
+        }
+
+    }
+
+    // Carrega o tema salvo
+    const savedTheme = localStorage.getItem("financemind-theme");
+
+    if (savedTheme === "dark") {
+        html.classList.add("dark-mode");
+    }
+
+    updateTheme();
+
+    themeToggle.addEventListener("click", () => {
+
+        html.classList.toggle("dark-mode");
+
+        updateTheme();
+
+    });
+
+}

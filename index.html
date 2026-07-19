@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#5D9C3D">
     <title>FinanceMind | Organize sua Vida Financeira</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-com-modo-escuro.css">
 
     <!-- Fonte -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +15,26 @@
 
     <!-- Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+(function () {
+    try {
+        const savedTheme = localStorage.getItem("financemind-theme");
+        const prefersDark = window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const useDark = savedTheme
+            ? savedTheme === "dark"
+            : prefersDark;
+
+        if (useDark) {
+            document.documentElement.classList.add("dark-mode");
+        }
+    } catch (error) {
+        // O site continua funcionando mesmo se o armazenamento estiver bloqueado.
+    }
+})();
+</script>
+
 </head>
 
 <body>
@@ -26,6 +46,19 @@
 <div class="logo">
 FinanceMind
 </div>
+
+
+<button
+    class="theme-toggle"
+    id="themeToggle"
+    type="button"
+    aria-label="Ativar modo escuro"
+    aria-pressed="false"
+    title="Alternar tema"
+>
+    <i data-lucide="moon" class="theme-icon theme-icon-moon" aria-hidden="true"></i>
+    <i data-lucide="sun" class="theme-icon theme-icon-sun" aria-hidden="true"></i>
+</button>
 
 <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
 <span></span>
@@ -882,7 +915,7 @@ Termos
 <!-- Botão flutuante mobile -->
 <a href="#oferta" class="mobile-cta">Quero Organizar Minhas Finanças</a>
 
-<script src="script.js"></script>
+<script src="script-com-modo-escuro.js"></script>
 
 <script>
 
