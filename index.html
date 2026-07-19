@@ -16,25 +16,6 @@
     <!-- Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-<script>
-(function () {
-    try {
-        const savedTheme = localStorage.getItem("financemind-theme");
-        const prefersDark = window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const useDark = savedTheme
-            ? savedTheme === "dark"
-            : prefersDark;
-
-        if (useDark) {
-            document.documentElement.classList.add("dark-mode");
-        }
-    } catch (error) {
-        // O site continua funcionando mesmo se o armazenamento estiver bloqueado.
-    }
-})();
-</script>
-
 </head>
 
 <body>

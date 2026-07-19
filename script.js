@@ -804,52 +804,99 @@ if (
 }
 
 // =========================================
-// MODO CLARO / ESCURO - FINANCEMIND
+// MODO CLARO / ESCURO — FINANCEMIND
 // =========================================
 
-const themeToggle = document.getElementById("themeToggle");
+(() => {
 
-if (themeToggle) {
+    const themeButton = document.getElementById("themeToggle");
+    const pageRoot = document.documentElement;
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
 
-    const html = document.documentElement;
+    if (!themeButton) {
+        console.warn("Botão #themeToggle não encontrado.");
+        return;
+    }
 
-    function updateTheme() {
+    function darkModeIsActive() {
+        return pageRoot.classList.contains("dark-mode");
+    }
 
-        const dark = html.classList.contains("dark-mode");
+    function updateThemeButton() {
 
-        // Salva a preferência
-        localStorage.setItem(
-            "financemind-theme",
-            dark ? "dark" : "light"
+        const darkMode = darkModeIsActive();
+
+        themeButton.innerHTML = darkMode
+            ? '<i data-lucide="sun" aria-hidden="true"></i>'
+            : '<i data-lucide="moon" aria-hidden="true"></i>';
+
+        themeButton.setAttribute(
+            "aria-label",
+            darkMode ? "Ativar modo claro" : "Ativar modo escuro"
         );
 
-        // Atualiza o ícone
-        themeToggle.innerHTML = dark
-            ? '<i data-lucide="sun"></i>'
-            : '<i data-lucide="moon"></i>';
+        themeButton.setAttribute(
+            "aria-pressed",
+            String(darkMode)
+        );
 
-        // Atualiza os ícones Lucide
+        if (themeMeta) {
+            themeMeta.setAttribute(
+                "content",
+                darkMode ? "#0D1110" : "#5D9C3D"
+            );
+        }
+
         if (typeof lucide !== "undefined") {
             lucide.createIcons();
         }
 
     }
 
-    // Carrega o tema salvo
-    const savedTheme = localStorage.getItem("financemind-theme");
+    function saveTheme(theme) {
 
-    if (savedTheme === "dark") {
-        html.classList.add("dark-mode");
+        try {
+            localStorage.setItem("financemind-theme", theme);
+        } catch (error) {
+            console.warn("Não foi possível salvar o tema.");
+        }
+
     }
 
-    updateTheme();
+    function loadTheme() {
 
-    themeToggle.addEventListener("click", () => {
+        let savedTheme = null;
 
-        html.classList.toggle("dark-mode");
+        try {
+            savedTheme = localStorage.getItem("financemind-theme");
+        } catch (error) {
+            savedTheme = null;
+        }
 
-        updateTheme();
+        if (savedTheme === "dark") {
+            pageRoot.classList.add("dark-mode");
+        }
+
+        if (savedTheme === "light") {
+            pageRoot.classList.remove("dark-mode");
+        }
+
+        updateThemeButton();
+
+    }
+
+    themeButton.addEventListener("click", () => {
+
+        pageRoot.classList.toggle("dark-mode");
+
+        saveTheme(
+            darkModeIsActive() ? "dark" : "light"
+        );
+
+        updateThemeButton();
 
     });
 
-}
+    loadTheme();
+
+})();
